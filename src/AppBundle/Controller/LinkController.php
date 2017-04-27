@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Embed\Embed;
+use AppBundle\ImageSave\ImageSave;
 
 
 class LinkController extends Controller
@@ -51,6 +52,7 @@ class LinkController extends Controller
              $link->setDescription($description);
              $link->setType($type);
              $link->setImage($image);
+             $LinkSave = ImageSave::save($link->getImage());
              $link->setPublishedDate($publishedTime);
              //Save the URL to BDD
              $em = $this->getDoctrine()->getManager();
