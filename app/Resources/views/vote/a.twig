@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table style="width:100%">
+      <tr>
+        <th style=width:45%>User name</th>
+        <th style=width:45%>Link URL</th>
+        <th style=width:10%>Status</th>
+      </tr>
+      {% for vote in votes %}
+        <tr>
+          <td>{{ vote.user }}</td>
+          <td>{{ vote.url }}</td>
+          <td>{{ vote.status }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+{% endblock %}

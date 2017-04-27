@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-default">
+  <img src="images/banner01.jpg" width="100%" height="200px"/>
+  <div class="container-fluid">
+
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Projet_DL</a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">News <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">FAQ</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trier par <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Crevette</a></li>
+            <li><a href="#">Jambon</a></li>
+            <li><a href="#">Omelette</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Sandwitch</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Frommage</a></li>
+          </ul>
+        </li>
+      </ul>
+
+        <!--    BARRE DE RECHERCHE     -->
+    <form class="navbar-form navbar-left">
+      <div class="form-group">
+        <input type="text" class="form-control" placeholder="Rechercher">
+      </div>
+      <button type="submit" class="btn btn-default">Envoyer</button>
+    </form>
+        <!--     BARRE DE RECHERCHE     -->
+
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Link</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Parcourir.. <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Top</a></li>
+            <li><a href="#">Flop</a></li>
+            <li><a href="#">NFSW</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="#">Jean-Pierre Coffe</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+</div>    <!--    Fin container principal   -->
+</nav>    <!--  Fin nav_bar default   -->
+
+
+
+
+    <!-- <table style="width:100%">
+      <tr>
+        <th style=width:50%>URL</th>
+        <th style=width:10%>Likes</th>
+        <th style=width:10%>Dislikes</th>
+        <th style=width:10%>Total votes</th>
+        <th style=width:10%>Score</th>
+        <th style=width:10%>Position</th>
+      </tr> -->
+      {% for link in links %}
+
+        <div class="row">
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail">
+                <img alt="100%x200" data-src="holder.js/100%x200" style="height: 200px; width: 100%; display: block;" src="{{link.image}}" data-holder-rendered="true">
+                <div class="caption">
+                  <h3>{{link.title}}</h3>
+                  <p>{{link.description}}</p>
+                  <p>
+                      <a href="{{link.url}}"></a>
+                  </p>
+                  <p>
+                      <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': 1, 'id_link' : link.id, 'like' : 1}) }}">
+                          <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                      </a>
+
+                      <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': 1, 'id_link' : link.id, 'like' : 0}) }}">
+                          <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                      </a>
+                      <span>{{link.score}}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <!-- <tr>
+          <td>{{ link.url }}</td>
+          <td>{{ link.likes }}</td>
+          <td>{{ link.dislikes }}</td>
+          <td>{{ link.votes }}</td>
+          <td>{{ link.score }}</td>
+          <td>{{ link.position }}</td>
+        </tr> -->
+      {% endfor %}
+    <!-- </table> -->
+{% endblock %}
+{% block javascripts %}
+  <script>
+    $().dropdown('toggle');
+  </script>
+{% endblock %}

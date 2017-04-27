@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table style="width:100%">
+      <tr>
+        <th style=width:50%>URL</th>
+        <th style=width:10%>Likes</th>
+        <th style=width:10%>Dislikes</th>
+        <th style=width:10%>Total votes</th>
+        <th style=width:10%>Score</th>
+        <th style=width:10%>Position</th>
+      </tr>
+      {% for link in links %}
+        <tr>
+          <td>{{ link.url }}</td>
+          <td>{{ link.likes }}</td>
+          <td>{{ link.dislikes }}</td>
+          <td>{{ link.votes }}</td>
+          <td>{{ link.score }}</td>
+          <td>{{ link.position }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+{% endblock %}
