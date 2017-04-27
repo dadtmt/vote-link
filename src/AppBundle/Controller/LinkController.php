@@ -10,8 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Embed\Embed;
-use AppBundle\ImageSave\ImageSave;
 
 
 class LinkController extends Controller
@@ -52,26 +52,37 @@ class LinkController extends Controller
              $link->setDescription($description);
              $link->setType($type);
              $link->setImage($image);
-             $LinkSave = ImageSave::save($link->getImage());
              $link->setPublishedDate($publishedTime);
+             $session = new Session();
+             $session->set('link', $link);
              //Save the URL to BDD
              $em = $this->getDoctrine()->getManager();
              $em->persist($link);
              $em->flush();
 
-             return $this->render('link/resultat.html.twig',
-             [
-                  'url' => $link->getURL(),
-                  'image' => $link->getImage(),
-                  'description' => $link->getDescription(),
-                  'title' => $link->getTitle(),
-              ]);
-          }
+             return $this->redirectToRoute('resultatpage');
 
-      return $this->render('link/recup-url.html.twig',
+         }
+      return $this->render('default/recup-url.html.twig',
       [
           'form' => $form->createView(),
       ]);
+  }
+  /**
+   * @Route("/resultat", name="resultatpage")
+   */
+  public function resultatAction()
+  {
+      $session = new Session();
+      $link = $session->get('link');
+      return $this->render('default/resultat.html.twig',
+      [
+           'url' => $link->getURL(),
+           'image' => $link->getImage(),
+           'description' => $link->getDescription(),
+           'title' => $link->getTitle(),
+       ]);
+
   }
 
 }
