@@ -1,108 +1,48 @@
 <?php
 namespace AppBundle\Entity;
 
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="User")
+ * @ORM\Table(name="fos_user")
  */
-class User
+class User extends BaseUser
 {
-  /**
+    /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-  private $id;
-  /**
-     * @ORM\Column(type="string", length=100)
-     */
-  private $name;
-  /**
-     * @ORM\Column(type="string", length=100)
-     */
-  private $email;
+    protected $id;
 
-  /**
-   * @ORM\OneToMany(targetEntity="Vote", mappedBy="User")
-   */
-  private $votes;
+    /**
+     * @ORM\OneToMany(targetEntity="Vote", mappedBy="User")
+     */
+    private $votes;
 
-  public function __construct()
-  {
+    /**
+    * @Assert\Length(
+    *     min=8,
+    *     max=100,
+    *     minMessage="mot de passe trop court ",
+    *     groups={"Profile", "ResetPassword", "Registration", "ChangePassword"}
+    * )
+    * @Assert\Regex(
+    *     pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).{8,100}$/",
+    *     message="Le mot de passe doit contenir des caractères aA-zZ et nombres 0-9",
+    *     groups={"Profile", "ResetPassword", "Registration", "ChangePassword"}
+    * )
+    */
+   protected $plainPassword;
+
+    public function __construct()
+    {
       $this->votes = new ArrayCollection();
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return User
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return User
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -114,9 +54,8 @@ class User
      */
     public function addVote(\AppBundle\Entity\Vote $vote)
     {
-        $this->votes[] = $vote;
-
-        return $this;
+      $this->votes[] = $vote;
+      return $this;
     }
 
     /**
@@ -126,7 +65,7 @@ class User
      */
     public function removeVote(\AppBundle\Entity\Vote $vote)
     {
-        $this->votes->removeElement($vote);
+      $this->votes->removeElement($vote);
     }
 
     /**
@@ -136,6 +75,6 @@ class User
      */
     public function getVotes()
     {
-        return $this->votes;
+      return $this->votes;
     }
 }

@@ -77,6 +77,16 @@
         <th style=width:10%>Score</th>
         <th style=width:10%>Position</th>
       </tr> -->
+      {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+          <div>  Vous êtes connecter en tant que: {{ app.user.username }} </div>
+          <a href="{{ path('fos_user_security_logout') }}">
+              {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+          </a>
+          {% else %}
+              <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+              <a href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+      {% endif %}
+
       {% for link in links %}
 
         <div class="row">
@@ -90,13 +100,14 @@
                       <a href="{{link.url}}"></a>
                   </p>
                   <p>
-                      <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': 1, 'id_link' : link.id, 'like' : 1}) }}">
-                          <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
-                      </a>
-
-                      <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': 1, 'id_link' : link.id, 'like' : 0}) }}">
-                          <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
-                      </a>
+                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                          <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': app.user.id, 'id_link' : link.id, 'like' : 1}) }}">
+                              <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                          </a>
+                          <a type="button" class="btn btn-default" aria-label="Left Align" href="{{ path('vote', {'id_user': app.user.id, 'id_link' : link.id, 'like' : 0}) }}">
+                              <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+                          </a>                     
+                      {% endif %}
                       <span>{{link.score}}</span>
                   </p>
                 </div>

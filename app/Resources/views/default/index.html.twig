@@ -4,7 +4,6 @@
     <div>
         {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
             <div>  votre nom est: {{ app.user.username }} </div>
-            <div>  Votre ID est: {{ app.user.id }} </div>
             <a href="{{ path('fos_user_security_logout') }}">
                 {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
             </a>
