@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,8 +51,15 @@ class Link
      */
     private $publishedDate;
 
+    /**
+    * @ORM\OneToMany(targetEntity="Vote", mappedBy="Link")
+    */
+    private $votes;
 
-
+    public function __construct()
+    {
+      $this->votes = new ArrayCollection();
+    }
 
     /**
      * Get id
@@ -205,5 +213,39 @@ class Link
     public function getPublishedDate()
     {
         return $this->publishedDate;
+    }
+
+    /**
+     * Add vote
+     *
+     * @param \AppBundle\Entity\Vote $vote
+     *
+     * @return Link
+     */
+    public function addVote(\AppBundle\Entity\Vote $vote)
+    {
+        $this->votes[] = $vote;
+
+        return $this;
+    }
+
+    /**
+     * Remove vote
+     *
+     * @param \AppBundle\Entity\Vote $vote
+     */
+    public function removeVote(\AppBundle\Entity\Vote $vote)
+    {
+        $this->votes->removeElement($vote);
+    }
+
+    /**
+     * Get vote
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getVotes()
+    {
+        return $this->votes;
     }
 }

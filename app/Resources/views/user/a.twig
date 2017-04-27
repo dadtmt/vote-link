@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table style="width:100%">
+      <tr>
+        <th style=width:35%>Name</th>
+        <th style=width:35%>E-mail</th>
+        <th style=width:10%>Likes</th>
+        <th style=width:10%>Dislikes</th>
+        <th style=width:10%>Total votes</th>
+      </tr>
+      {% for user in users %}
+        <tr>
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{ user.likes }}</td>
+          <td>{{ user.dislikes }}</td>
+          <td>{{ user.votes }}</td>
+        </tr>
+      {% endfor %}
+    </table>
+{% endblock %}

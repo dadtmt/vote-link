@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use AppBundle\Entity\Link;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -58,14 +59,14 @@ class LinkController extends Controller
              $em = $this->getDoctrine()->getManager();
              $em->persist($link);
              $em->flush();
-
-             return $this->render('link/resultat.html.twig',
-             [
-                  'url' => $link->getURL(),
-                  'image' => $link->getImage(),
-                  'description' => $link->getDescription(),
-                  'title' => $link->getTitle(),
-              ]);
+            return $this->redirectToRoute('listLinks');
+            //  return $this->render('link/resultat.html.twig',
+            //  [
+            //       'url' => $link->getURL(),
+            //       'image' => $link->getImage(),
+            //       'description' => $link->getDescription(),
+            //       'title' => $link->getTitle(),
+            //   ]);
           }
 
       return $this->render('link/recup-url.html.twig',
@@ -73,5 +74,37 @@ class LinkController extends Controller
           'form' => $form->createView(),
       ]);
   }
+
+  /**
+     * @Route("/", name="listLinks")
+     */
+    public function listLinksAction()
+    {
+      $em = $this->getDoctrine()->getManager();
+      $repository = $this->getDoctrine()->getRepository('AppBundle:Link');
+      $allLinks = $repository->findAll();
+      $stack = array();
+      foreach($allLinks as $lnk)
+      {
+        $likesCount = $em->createQuery('SELECT COUNT(v.id) FROM AppBundle\Entity\Vote v JOIN v.link l WHERE (l.id = ' . $lnk->getId() . ' AND v.voteLike = true)' )->getSingleScalarResult();
+        $dislikesCount = $em->createQuery('SELECT COUNT(v.id) FROM AppBundle\Entity\Vote v JOIN v.link l WHERE (l.id = ' . $lnk->getId() . ' AND v.voteLike = false)' )->getSingleScalarResult();
+        $position = $likesCount + $dislikesCount == 0 ? 0 : round(100 * ($likesCount - $dislikesCount) / ($likesCount + $dislikesCount));
+        array_push($stack, array(
+            'id' => $lnk->getId(),
+            'url' => $lnk->getUrl(),
+            'likes' => $likesCount,
+            'dislikes' => $dislikesCount,
+            'votes' => $likesCount + $dislikesCount,
+            'score' => $likesCount - $dislikesCount,
+            'position' => $position,
+            'image' => $lnk->getImage(),
+            'description' => $lnk->getDescription(),
+            'title' => $lnk->getTitle()
+        ));
+      }
+      return $this->render('link/listlinks.html.twig', [
+          'links' => $stack,
+      ]);
+    }
 
 }
