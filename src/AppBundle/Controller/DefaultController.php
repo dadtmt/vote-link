@@ -15,7 +15,7 @@ class DefaultController extends Controller
     {
         // replace this example code with whatever you need
          return $this->render('default/index.html.twig', [
-            'base_dir' => 'vote link app',
+            'base_dir' => 'vote link',
         ]);
     }
 }
