@@ -2,6 +2,7 @@
 namespace AppBundle\ImageSave;
 
 use Doctrine\ORM\Mapping as ORM;
+use GuzzleHttp\Client;
 use Imagine\Image\Box;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\Exception\UnsatisfiedDependencyException;
@@ -15,10 +16,8 @@ class ImageSave
             $uuid5 = Uuid::uuid5(Uuid::NAMESPACE_DNS, $url);
             $filename = $uuid5->toString();
             $ext = pathinfo($url, PATHINFO_EXTENSION);
-            $content = file_get_contents($url);
-            $fp = fopen("../var/image/".$filename.".".$ext , "w");
-            fwrite($fp, $content);
-            fclose($fp);
+            $client = new Client();
+            $client->request('GET', $url, ['sink' => "../var/image/".$filename.".".$ext]);
 
             $imagine = new \Imagine\Gd\Imagine();
             $image = $imagine->open("../var/image/".$filename.".".$ext);
